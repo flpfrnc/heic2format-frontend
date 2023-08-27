@@ -19,7 +19,7 @@ export default function Home() {
   async function formatFile(file: File[] | null) {
     if (!file) return;
 
-    const baseUrl = "https://heic2format.fly.dev";
+    const baseUrl = import.meta.env.VITE_API_URL;
     const formData = new FormData();
     formData.append("heic", file?.[0]);
 
