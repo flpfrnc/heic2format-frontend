@@ -1,0 +1,13 @@
+import { ReactComponent as GhCornerIcon } from "../../public/gh-corner.svg";
+
+export default function GithubCorner() {
+  return (
+    <a
+      style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%)" }}
+      href="https://github.com/flpfrnc/heic2format"
+      className="top-0 right-0 xl:fixed absolute z-20 hover:scale-110"
+    >
+      <GhCornerIcon className="w-28 h-28" />
+    </a>
+  );
+}
