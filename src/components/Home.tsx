@@ -22,25 +22,30 @@ export default function Home() {
     const baseUrl = import.meta.env.VITE_API_URL;
     const formData = new FormData();
     formData.append("heic", file?.[0]);
-
     formData.append("format", toFormat);
 
+    const updatedFileName = file?.[0].name.split(".HEIC")[0];
+
     try {
-      setFormattedImage({ ...formattedImage, loading: true });
-      fetch(`${baseUrl}/convert-image`, {
+      setFormattedImage({ ...formattedImage, fileName: updatedFileName, loading: true });
+      await fetch(`${baseUrl}/convert-image`, {
         method: "POST",
         body: formData,
-      })
-        .then((response) => response.blob())
-        .then((blob) => {
-          const url = window.URL.createObjectURL(blob);
-          setFormattedImage({ ...formattedImage, fileUrl: url, fileName: file?.[0].name.split(".HEIC")[0] });
-        });
+      });
+
+      const blob = await fetch(`${baseUrl}/image/` + updatedFileName, {
+        method: "GET",
+      }).then((response) => response.blob());
+
+      const url = window.URL.createObjectURL(blob);
+      setFormattedImage({ ...formattedImage, fileUrl: url, fileName: updatedFileName, loading: false });
+      setImage(null);
     } catch (error) {
       console.error(error);
       setFormattedImage({ ...formattedImage, loading: false });
+      setImage(null);
 
-      alert("falha na conversão da imagem");
+      alert("Image convertion failed");
     }
   }
 
@@ -89,7 +94,7 @@ export default function Home() {
           </div>
 
           <div>
-            {formattedImage.fileUrl && (
+            {formattedImage.fileUrl && !formattedImage.loading && (
               <div id="image" className="rounded-lg overflow-hidden my-8 sm:my-8 md:my-8 hover:scale-125">
                 <img width="120" height="240" src={formattedImage.fileUrl} />
               </div>
