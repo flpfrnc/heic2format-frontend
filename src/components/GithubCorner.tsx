@@ -1,4 +1,4 @@
-import { ReactComponent as GhCornerIcon } from "../../public/gh-corner.svg";
+import { ReactComponent as GhCornerIcon } from "/src/assets/gh-corner.svg";
 
 export default function GithubCorner() {
   return (
