@@ -3,6 +3,7 @@ import Header from "./Header";
 import GithubCorner from "./GithubCorner";
 import FileInput from "./FileInput";
 import Spinner from "./Spinner";
+import heic2any from "heic2any";
 
 export default function Home() {
   const [image, setImage] = useState<File[] | null>(null);
@@ -19,33 +20,25 @@ export default function Home() {
   async function formatFile(file: File[] | null) {
     if (!file) return;
 
-    const baseUrl = import.meta.env.VITE_API_URL;
-    const formData = new FormData();
-    formData.append("heic", file?.[0]);
-    formData.append("format", toFormat);
-
-    const updatedFileName = file?.[0].name.split(".HEIC")[0];
-
+    const blob = file?.[0];
     try {
-      setFormattedImage({ ...formattedImage, fileName: updatedFileName, loading: true });
-      await fetch(`${baseUrl}/convert-image`, {
-        method: "POST",
-        body: formData,
+      setFormattedImage({ ...formattedImage, loading: true });
+      heic2any({
+        blob: blob,
+        toType: `image/${toFormat}`,
+      }).then(function (resultBlob) {
+        var url = Array.isArray(resultBlob) ? window.URL.createObjectURL(resultBlob[0]) : window.URL.createObjectURL(resultBlob);
+
+        const updatedFileName = blob.name + `.${toFormat}`;
+
+        setFormattedImage({ fileUrl: url, fileName: updatedFileName, loading: false });
+        setImage(null);
       });
-
-      const blob = await fetch(`${baseUrl}/image/` + updatedFileName, {
-        method: "GET",
-      }).then((response) => response.blob());
-
-      const url = window.URL.createObjectURL(blob);
-      setFormattedImage({ ...formattedImage, fileUrl: url, fileName: updatedFileName, loading: false });
-      setImage(null);
     } catch (error) {
       console.error(error);
+      alert("Image convertion failed");
       setFormattedImage({ ...formattedImage, loading: false });
       setImage(null);
-
-      alert("Image convertion failed");
     }
   }
 
@@ -58,9 +51,9 @@ export default function Home() {
           <span className="text-white font-bold text-[16px] sm:text-[30px] md:text-[40px] xl:text-[50px]">Convert your images from .HEIC</span>
           <span className="text-[0.9rem] text-white text-end">to .JPEG and .PNG</span>
         </div>
-        <div className="flex flex-col gap-8 justify-center items-center px-8 sm:px-8 md:px-20 w-full min-h-[40vh]">
-          <div className="bg-white rounded-2xl min-h-fit w-full mx-10 shadow-2xl shadow-[#7A92FC] flex flex-col justify-center items-center">
-            <FileInput selectedFiles={image} setSelectedFiles={setImage} />
+        <div className="flex flex-col gap-8 justify-center items-center px-8 sm:px-8 md:px-20 min-w-[300px] min-h-[40vh]">
+          <div className="bg-white rounded-lg min-h-fit sm:max-w-[256px] md:max-w-[416px] sm:w-[256px] md:w-[416px] shadow-2xl shadow-[#7A92FC] flex flex-col justify-center items-center ">
+            <FileInput selectedFiles={image} setSelectedFiles={setImage} className="w-[256px] sm:w-[256px] md:w-[416px]" />
             <hr className="w-full" />
             <select
               className="p-2 outline-none border-none active:rounded-none rounded-b-lg w-full h-full text-center bg-white hover:bg-gray-100 cursor-pointer font-bold italic text-[#5091F8]"
