@@ -1,5 +1,4 @@
 import { ComponentPropsWithRef, Dispatch, RefObject, useRef } from "react";
-import { AiOutlineCloudUpload } from "react-icons/ai";
 
 interface FileInputProps extends ComponentPropsWithRef<"input"> {
   selectedFiles: File[] | null;
@@ -24,24 +23,24 @@ export default function FileInput(props: FileInputProps) {
   return (
     <div
       onClick={handleClick}
-      className={`relative p-4 flex flex-col items-center gap-2 bg-white text-[#5091F8] hover:bg-[#7A92FC1A] rounded-lg cursor-pointer w-full ${
+      className={`relative px-6 py-4 flex flex-col items-start gap-2 bg-white text-black hover:bg-[#7A92FC1A] rounded-lg cursor-pointer w-full ${
         props.className && props.className
       }`}
     >
-      <AiOutlineCloudUpload className="w-6 h-6" />
-      <span>Choose .HEIC images to upload</span>
       <input type="file" ref={fileInputRef} className="hidden" onChange={handleChange} accept=".heic" />
-      {!!props.selectedFiles?.length && (
-        <div className="p-4 mt-4 white overflow-hidden text-ellipsis max-w-[80%]">
-          <p>Selected Files:</p>
+      {!!props.selectedFiles?.length ? (
+        <div className="white overflow-hidden text-ellipsis max-w-[80%] text-sm">
+          <p>SELECTED</p>
           {props.selectedFiles?.map((file, i) => {
             return (
-              <span key={i} className="text-[#F49462] whitespace-nowrap italic">
+              <span key={i} className="text-[#A8A8A8] whitespace-nowrap italic">
                 {file.name}
               </span>
             );
           })}
         </div>
+      ) : (
+        <span>Select any images to convert</span>
       )}
     </div>
   );

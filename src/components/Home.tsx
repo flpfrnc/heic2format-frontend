@@ -43,26 +43,29 @@ export default function Home() {
   }
 
   return (
-    <main className="bg-[#5091F8] min-w-[100vw] min-h-[100vh] overflow-x-hidden">
+    <main className="bg-[#FEDEA9] min-w-[100vw] min-h-[100vh] overflow-x-hidden">
       <GithubCorner />
       <Header />
-      <section className="w-full flex flex-col justify-center items-center py-10 sm:px-0 xl:px-20">
-        <div className="flex flex-col py-16 w-fit">
-          <span className="text-white font-bold text-[16px] sm:text-[30px] md:text-[40px] xl:text-[50px]">Convert your images from .HEIC</span>
-          <span className="text-[0.9rem] text-white text-end">to .JPEG and .PNG</span>
+      <section className="w-full flex flex-col justify-start items-start py-10 sm:px-0 xl:px-20">
+        <div className="flex flex-col px-14 md:px-32 w-fit">
+          <span className="text-black font-bold text-[30px] sm:text-[30px] md:text-[70px] xl:text-[70px] leading-[1]">HEIC2Format</span>
+          <span className="text-black text-[0.9rem] text-start md:px-[2px]">Convert your images from .HEIC to .JPEG and .PNG</span>
         </div>
-        <div className="flex flex-col gap-8 justify-center items-center px-8 sm:px-8 md:px-20 min-w-[300px] min-h-[40vh]">
-          <div className="bg-white rounded-lg min-h-fit sm:max-w-[256px] md:max-w-[416px] sm:w-[256px] md:w-[416px] shadow-2xl shadow-[#7A92FC] flex flex-col justify-center items-center ">
+        <div className="flex flex-col gap-4 justify-center items-center px-8 sm:px-8 md:px-32 min-w-full md:min-w-[300px] py-16">
+          <div className="bg-white rounded-lg min-h-fit w-[300px] sm:max-w-[300px] md:max-w-[416px] sm:w-[300px] md:w-[416px] shadow-2xl flex flex-col justify-center items-center ">
             <FileInput selectedFiles={image} setSelectedFiles={setImage} className="w-[256px] sm:w-[256px] md:w-[416px]" />
             <hr className="w-full" />
-            <select
-              className="p-2 outline-none border-none active:rounded-none rounded-b-lg w-full h-full text-center bg-white hover:bg-gray-100 cursor-pointer font-bold italic text-[#5091F8]"
-              value={toFormat}
-              onChange={(e) => setToFormat(e.target.value)}
-            >
-              <option value="jpeg">{"HEIC >> JPEG"}</option>
-              <option value="png">{"HEIC >> PNG"}</option>
-            </select>
+            <div className="w-full flex">
+              <select
+                className="px-4 py-2 outline-none border-none active:rounded-none rounded-b-lg w-fit h-full text-center bg-white hover:bg-gray-100 cursor-pointer font-bold italic text-black"
+                value={toFormat}
+                onChange={(e) => setToFormat(e.target.value)}
+              >
+                <option value="jpeg">{"JPEG"}</option>
+                <option value="png">{"PNG"}</option>
+              </select>
+              <div className="w-full flex justify-end items-center px-6">{image && image[0]?.name.replace("HEIC", toFormat)}</div>
+            </div>
           </div>
           <div className="flex flex-col sm:flex-col md:flex-row gap-8">
             {formattedImage.loading ? (
@@ -85,15 +88,20 @@ export default function Home() {
               Download last image
             </button>
           </div>
-
-          <div>
+        </div>
+      </section>
+      <section className="w-full bg-white min-h-[300px] flex items-center px-14 sm:px-14 md:px-32">
+        {!formattedImage.loading && formattedImage.fileName ? (
+          <div className="w-fit">
             {formattedImage.fileUrl && !formattedImage.loading && (
               <div id="image" className="rounded-lg overflow-hidden my-8 sm:my-8 md:my-8 hover:scale-125">
-                <img width="120" height="240" src={formattedImage.fileUrl} />
+                <img width="180" height="240" src={formattedImage.fileUrl} />
               </div>
             )}
           </div>
-        </div>
+        ) : (
+          <span className="md:px-20 text-[1rem] md:text-xl text-gray-400 font-bold">Nenhuma imagem foi convertida</span>
+        )}
       </section>
     </main>
   );
