@@ -1,6 +1,4 @@
 import { useState } from "react";
-import Header from "./Header";
-import GithubCorner from "./GithubCorner";
 import FileInput from "./FileInput";
 import Spinner from "./Spinner";
 import heic2any from "heic2any";
@@ -43,13 +41,11 @@ export default function Home() {
   }
 
   return (
-    <main className="bg-[#FEDEA9] min-w-[100vw] min-h-[100vh] overflow-x-hidden">
-      <GithubCorner />
-      <Header />
+    <>
       <section className="w-full flex flex-col justify-start items-start py-10 sm:px-0 xl:px-20">
         <div className="flex flex-col px-14 md:px-32 w-fit">
           <span className="text-black font-bold text-[30px] sm:text-[30px] md:text-[70px] xl:text-[70px] leading-[1]">HEIC2Format</span>
-          <span className="text-black text-[0.9rem] text-start md:px-[2px]">Convert your images from .HEIC to .JPEG and .PNG</span>
+          <span>Convert your images from .HEIC to .JPEG and .PNG</span>
         </div>
         <div className="flex flex-col gap-4 justify-center items-center px-8 sm:px-8 md:px-32 min-w-full md:min-w-[300px] py-16">
           <div className="bg-white rounded-lg min-h-fit w-[300px] sm:max-w-[300px] md:max-w-[416px] sm:w-[300px] md:w-[416px] shadow-2xl flex flex-col justify-center items-center ">
@@ -90,7 +86,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="w-full bg-white min-h-[300px] flex items-center px-14 sm:px-14 md:px-32">
+      <section className="w-full bg-white min-h-[100px] sm:min-h-[100px] md:min-h-[300px] flex items-center px-14 sm:px-14 md:px-32 mt-auto sm:mt-auto">
         {!formattedImage.loading && formattedImage.fileName ? (
           <div className="w-fit">
             {formattedImage.fileUrl && !formattedImage.loading && (
@@ -100,9 +96,11 @@ export default function Home() {
             )}
           </div>
         ) : (
-          <span className="md:px-20 text-[1rem] md:text-xl text-gray-400 font-bold">Nenhuma imagem foi convertida</span>
+          <span className="w-full text-center sm:text-center md:text-left md:px-0 xl:px-20 text-[1rem] md:text-xl text-gray-400 font-bold">
+            Nenhuma imagem foi convertida
+          </span>
         )}
       </section>
-    </main>
+    </>
   );
 }
